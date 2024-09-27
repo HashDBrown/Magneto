@@ -5,12 +5,12 @@ description = ""
 authors = ["G14"]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = ">=3.9,<3.13"
 scikit-image = "^0.19.1"
 opencv-python = "^4.5.5"
 imutils = "^0.5.4"
 pytesseract = "^0.3.8"
-colour-science = "^0.3.16"
+colour-science = "^0.4.3"
 scikit-learn = "^1.0.2"
 langdetect = "^1.0.9"
 lxml = "^4.8.0"
@@ -21,6 +21,7 @@ pycld2 = "^0.41"
 torch = "1.10.2"
 torchvision = "^0.11.3"
 numpy = "<1.24"
+matplotlib = "^3.9.2"
 
 [tool.poetry.dev-dependencies]
 

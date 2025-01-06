@@ -157,7 +157,8 @@ def create_trigger_word_list():
 
 def main():
     args = load_arguments()
-    data = read_json(os.path.join(args["bugId"], "Execution-22.json"))
+    bugId = args["bugId"]
+    data = read_json(os.path.join(args["bugId"], f"Execution-{bugId}.json"))
 
     listOfTriggerWords = create_trigger_word_list()
     listOfTriggerComponents = create_trigger_component_list()

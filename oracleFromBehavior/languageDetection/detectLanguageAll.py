@@ -152,7 +152,8 @@ def detect_language(txt, selected_lang, lang_data):
 
 def main():
     args = load_arguments()
-    data = read_json(args["bugId"] + "/Execution-21.json")
+    bugId = args["bugId"]
+    data = read_json(args["bugId"] + f"/Execution-{bugId}.json")
     lang_data = read_json("language_code.json")
 
     app_name = args["appName"]

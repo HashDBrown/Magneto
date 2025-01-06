@@ -208,7 +208,7 @@ def main():
     bugId = args["bugId"]
     screen_count_map = {}
 
-    data = read_json(os.path.join(bugId, "Execution-23.json"))
+    data = read_json(os.path.join(bugId, f"Execution-{bugId}.json"))
     listOfTriggerWords = create_trigger_list()
 
     for line in data:

@@ -184,7 +184,7 @@ def get_image_before(args, key):
 def main():
 
     args = load_arguments()
-    data = read_json(args["bugId"] + "/Execution-12.json")
+    data = read_json(args["bugId"] + "/Execution-22.json")
     app_name = args["appName"]  # +"_"+args["bugid"]
 
     for line in data:

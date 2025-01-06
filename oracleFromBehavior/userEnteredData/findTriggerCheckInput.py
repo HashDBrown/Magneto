@@ -72,15 +72,18 @@ def find_trigger(
 
 
 def find_xml_from_screenshot(imagename, stepNum, args):
+   #print(f"Processing screenshot: {imagename}")
     xmlName = ""
     if tracePlayerGenerated:
         xmlName = imagename.split(".User-Trace")[0]
-        xmlName += "-" + args["bugId"] + "-12-User-Trace-" + str(stepNum) + ".xml"
+        versionName = imagename.split("_")[1]
+        xmlName += "-" + versionName + "-" + args["bugId"] + "-User-Trace-" + str(stepNum) + ".xml"
+        #print(f"Generated XML name: {xmlName}")
     else:
         xmlName = imagename.split("screen")[0]
         xmlName += "ui-dump.xml"
-
-    return os.path.join(args["bugId"], os.path.join("xmls", xmlName)), xmlName
+    print(f"Generated XML name: {xmlName}")
+    return os.path.join(args["bugId"], xmlName), xmlName
 
 
 def find_edit_text(listOfSteps, screen_count_map, args):
@@ -154,7 +157,7 @@ def create_trigger_word_list():
 
 def main():
     args = load_arguments()
-    data = read_json(os.path.join(args["bugId"], "Execution-12.json"))
+    data = read_json(os.path.join(args["bugId"], "Execution-22.json"))
 
     listOfTriggerWords = create_trigger_word_list()
     listOfTriggerComponents = create_trigger_component_list()

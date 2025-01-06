@@ -56,7 +56,7 @@ def find_xml_from_screenshot(imagename, stepNum, args):
     else:
         xmlName = imagename.split("screen")[0]
         xmlName += "ui-dump.xml"
-    return xmlName
+    return os.path.join(args["bugId"], xmlName), xmlName
 
 
 def find_single_trigger(listOfSteps, args):

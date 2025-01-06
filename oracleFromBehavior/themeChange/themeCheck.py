@@ -93,15 +93,20 @@ def check_if_theme_set(
 
 
 def find_xml_from_screenshot(imagename, stepNum, args):
+   #print(f"Processing screenshot: {imagename}")
     xmlName = ""
     if tracePlayerGenerated:
         xmlName = imagename.split(".User-Trace")[0]
-        xmlName += "-" + args["bugId"] + "-12-User-Trace-" + str(stepNum) + ".xml"
+        versionName = imagename.split("_")[1]
+        xmlName += "-" + versionName + "-" + args["bugId"] + "-User-Trace-" + str(stepNum) + ".xml"
+        #print(f"Generated XML name: {xmlName}")
     else:
         xmlName = imagename.split("screen")[0]
         xmlName += "ui-dump.xml"
+    print(f"Generated XML name: {xmlName}")
+    return os.path.join(args["bugId"], xmlName)
 
-    return os.path.join(args["bugId"], os.path.join("xmls", xmlName))
+
 
 
 def get_step_details(step):
@@ -149,7 +154,6 @@ def find_trigger_reading_image(listOfSteps, screen_count_map, listOfTriggerWords
 
         clicked_Image = os.path.join(bugId, clicked_screen)
         xmlPath = find_xml_from_screenshot(start_screen, screen_index, args)
-
         image_xml_map[result_screen] = xmlPath
 
         if theme_set and correct_screen_found and screen_index > correct_theme_index:
@@ -160,12 +164,9 @@ def find_trigger_reading_image(listOfSteps, screen_count_map, listOfTriggerWords
                 clicked_Image, xmlPath, tapPos, clicked_comp_name, listOfTriggerWords
             )
         if themeChanged and not theme_set:
-            # print("YUP", xmlPath)
             if not oneStep:
                 xmlPath = find_xml_from_screenshot(lastScreen, screen_index - 1, args)
             text_in_trigger_screen = sorted(xmlUtilities.readTextInXml(xmlPath))
-            # print(xmlPath)
-            # print(text_in_trigger_screen)
             theme_set = True
             correct_screen_found = False
             before_theme = imgUtil.is_image_light(os.path.join(bugId, start_screen))
@@ -207,7 +208,7 @@ def main():
     bugId = args["bugId"]
     screen_count_map = {}
 
-    data = read_json(os.path.join(bugId, "Execution-12.json"))
+    data = read_json(os.path.join(bugId, f"Execution-{bugId}.json"))
     listOfTriggerWords = create_trigger_list()
 
     for line in data:

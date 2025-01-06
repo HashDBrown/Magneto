@@ -3,13 +3,14 @@ from unittest import result
 import cv2
 import numpy as np
 import pytesseract
-from langdetect import detect_langs
+from langdetect import detect_langs, LangDetectException
 import os, sys, json
 import argparse
 from pprint import pprint
 
 
 from polyglot.detect import Detector
+#DetectorFactory.seed = 0
 
 # Location of imageUtilities.py
 scriptLocation = os.getcwd()
@@ -130,33 +131,29 @@ def display_result(val, result_map, selected_lang, total, trigger):
 
 
 def detect_language(txt, selected_lang, lang_data):
-
     result_map = {}
-
     total_count = len(txt)
     for line in txt:
         try:
-            for language in Detector(line, quiet=True).languages:
-                name = language.name
-                code = language.code
-                language_info = lang_data[code]
-                confidence = language.confidence
-                all_names = language_info["name"].split(",") + language_info[
-                    "nativeName"
-                ].split(",")
-
-                if selected_lang not in all_names and float(confidence) >= 70:
-                    result_map[line] = name
-        except Exception as e:
-            # print(line)
+            detected_langs = detect_langs(line)
+            if detected_langs:
+                # Get the most probable language
+                detected_lang = detected_langs[0].lang
+                confidence = detected_langs[0].prob * 100  # Convert to percentage
+                language_info = lang_data.get(detected_lang, {})
+                all_names = language_info.get("name", "").split(",") + language_info.get("nativeName", "").split(",")
+                if selected_lang not in all_names and confidence >= 70:
+                    result_map[line] = language_info.get("name", detected_lang)
+        except LangDetectException:
+            # Language could not be detected
             continue
-
     return (result_map, total_count)
 
 
 def main():
     args = load_arguments()
-    data = read_json(args["bugId"] + "/Execution-12.json")
+    bugId = args["bugId"]
+    data = read_json(args["bugId"] + f"/Execution-{bugId}.json")
     lang_data = read_json("language_code.json")
 
     app_name = args["appName"]
